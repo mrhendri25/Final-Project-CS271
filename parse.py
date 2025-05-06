@@ -4,6 +4,20 @@ from typing import Any, Callable
 from numpy import ndarray
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+
+def reg(co: list, out) -> LinearRegression:
+    factors = np.array(co).T
+    analysis = LinearRegression()
+
+    analysis.fit(factors, out)
+
+    print("coefficients \t", analysis.coef_)
+    print("intercept \t", analysis.intercept_)
+    print("R^2 value \t", analysis.score(factors, out))
+    return analysis
 
 
 def getMainData() -> pd.DataFrame:
@@ -135,8 +149,11 @@ big_mask = safe_data["INCWAGE"] <= 500000
 white_ppl = safe_data["RACE"] == 100
 black_ppl = safe_data["RACE"] == 200
 z_mask = safe_data["INCWAGE"] != 0
-print(scalers.index)
-plt.plot(scalers.index, scalers)
+filt = safe_data[big_mask & z_mask]
+w_test = operate(filt[white_ppl], "AGE", "INCWAGE", lambda x: np.median(x))
+b_test = operate(filt[black_ppl], "AGE", "INCWAGE", lambda x: np.median(x))
+plt.plot(w_test[0], w_test[1])
+plt.plot(b_test[0], b_test[1])
 plt.show()
 
 # [print(x) for x in safe_data[safe_data["RACE"] == 100]["INCWAGE"]]
