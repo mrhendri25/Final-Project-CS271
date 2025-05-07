@@ -1,3 +1,4 @@
 *.csv
-data/data.pkl
-data/per_cap.pkt
+data/*.pkt
+data/*.pkl
+.DS_Store
